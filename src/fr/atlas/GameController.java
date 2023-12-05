@@ -13,6 +13,9 @@ public class GameController {
 
 	public void startGame() {}
 
-	public void nextTurn() {}
+	public void addPlayer(Player player) {
+		this.player.add(player);
+	}
 
+	public void nextTurn() {}
 }
