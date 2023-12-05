@@ -2,13 +2,17 @@ package fr.atlas;
 import java.util.List;
 
 public class GameController {
-	private List<Players> players;
+	private List<Player> player;
 	private Deck deck;
-	private Players currentPlayer;
+	private Player currentPlayer;
 
-	public GameController(List<Players> players, Deck deck) {
-        this.players = players;
+	public GameController( List<Player> players, Deck deck) {
+        this.player = players;
         this.deck = deck;
     }
+
+	public void startGame() {}
+
+	public void nextTurn() {}
 
 }

@@ -1,10 +1,10 @@
 package fr.atlas;
 import java.util.List;
 
-public class Players {
+public class Player {
 	private String playerName;
 	private List<Card> hand;
-	public Players() {
+	public Player() {
 
 	}
 }
