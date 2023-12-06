@@ -1,10 +1,6 @@
-package fr.atlas;
+package Cards;
 
 public abstract class Card {
 	protected abstract String mName();
-
-	protected Card() {
-	}
-
 	public abstract void playCard();
 }

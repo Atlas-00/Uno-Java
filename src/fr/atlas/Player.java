@@ -1,13 +1,23 @@
 package fr.atlas;
+
+import Cards.Card;
+
 import java.util.List;
 
 public class Player {
-	private final String mPlayerName;
+	private final String mName;
 	private List<Card> mHand;
+
 	public Player(String name, List<Card> hand) {
-		this.mPlayerName = name;
-        this.mHand = hand;
+		this.mName = name;
+		this.mHand = hand;
 	}
-	public void playCard(Card card) {}
-	public void drawCard(Card card) {}
+
+	public String getName() {
+		return mName;
+	}
+
+	public void drawCard( Card card) {
+		mHand.add(card);
+	}
 }
