@@ -1,6 +1,6 @@
 package fr.atlas;
 
-import Cards.Card;
+import Cards.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,18 @@ public class GameController implements Deck {
 
 	public GameController() {
 		this.players = new ArrayList<>();
-		// Initialize deck and other variables if needed
+		this.deck = new Deck() {
+			@Override
+			public void shuffle() {
+
+			}
+
+			@Override
+			public Card drawCard() {
+
+				return null;
+			}
+		};
 	}
 
 	public void startGame() {
