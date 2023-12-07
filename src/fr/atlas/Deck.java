@@ -1,6 +1,6 @@
 package fr.atlas;
 
-import Cards.Card;
+import fr.atlas.Cards.Card;
 
 interface Deck {
 	void shuffle();

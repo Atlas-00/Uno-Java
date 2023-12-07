@@ -1,0 +1,46 @@
+package fr.atlas.Cards;
+
+public class ActionCard extends Card {
+	private final String mActionType;
+	private final String mDescription;
+
+	public ActionCard(String actionType) {
+		super("TOUTE"); // Couleur par défaut pour les cartes d'action
+		this.mActionType = actionType;
+
+		// Définir la description en fonction du type d'action
+		switch (actionType.toUpperCase()) {
+			case "REVERSE":
+				this.mDescription = "Inverse le sens du jeu";
+				break;
+			case "SKIP":
+				this.mDescription = "Passez le tour";
+				break;
+			case "DRAW_TWO":
+				this.mDescription = "Piochez deux cartes";
+				break;
+			case "WILD_DRAW_FOUR":
+				this.mDescription = "Wild Draw Four - Piochez quatre cartes";
+				break;
+			case "WILD":
+				this.mDescription = "Wild - Change de couleur";
+				break;
+			default:
+				this.mDescription = "Description non spécifiée";
+				break;
+		}
+	}
+
+	public String getActionType() {
+		return mActionType;
+	}
+
+	public String getDescription() {
+		return mDescription;
+	}
+
+	@Override
+	public void playCard() {
+
+	}
+}

@@ -1,6 +1,6 @@
 package fr.atlas;
 
-import Cards.*;
+import fr.atlas.Cards.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,23 +8,11 @@ import java.util.Scanner;
 
 public class GameController implements Deck {
 	private final List<Player> players;
-	private Deck deck;
+	private PaquetCard paquetCard;
 	private Player currentPlayer;
 
 	public GameController() {
 		this.players = new ArrayList<>();
-		this.deck = new Deck() {
-			@Override
-			public void shuffle() {
-
-			}
-
-			@Override
-			public Card drawCard() {
-
-				return null;
-			}
-		};
 	}
 
 	public void startGame() {
@@ -38,12 +26,10 @@ public class GameController implements Deck {
 		System.out.print("Vous allez jouer à combien : ");
 		int nbPlayer = scanner.nextInt();
 
-		int numPlayer = 1;
-		for (int i = 0; i < nbPlayer; i++) {
-			System.out.print("Veuillez saisir le nom du joueur n°" + numPlayer + " : ");
-			numPlayer++;
+		for (int i = 1; i < nbPlayer; i++) {
+			System.out.print("Veuillez saisir le nom du joueur n°" + i + " : ");
 			String name = scanner.next();
-			players.add(new Player(name, new ArrayList<>()));
+			players.add(new Player(name));
 		}
 
 		drawCard();
@@ -62,7 +48,7 @@ public class GameController implements Deck {
 	public Card drawCard() {
 		for (Player player : players) {
 			for (int i = 0; i < 7; i++) {
-				player.drawCard(deck.drawCard());
+				player.drawCard(paquetCard.drawCard());
 			}
 		}
 		return null;

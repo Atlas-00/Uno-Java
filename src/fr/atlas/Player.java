@@ -1,16 +1,17 @@
 package fr.atlas;
 
-import Cards.Card;
+import fr.atlas.Cards.Card;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
 	private final String mName;
 	private final List<Card> mHand;
 
-	public Player(String name, List<Card> hand) {
+	public Player(String name) {
 		this.mName = name;
-		this.mHand = hand;
+		this.mHand = new ArrayList<>();
 	}
 
 	public String getName() {
