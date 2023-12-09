@@ -24,6 +24,6 @@ public class NumberCard extends Card {
 
 	@Override
 	public String toString() {
-		return "Value = " + getValue() + ", Color = " + getColor();
+		return "{Value = " + getValue() + ", Color = " + getColor() + "} ";
 	}
 }

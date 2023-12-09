@@ -58,6 +58,7 @@ public class GameController implements Deck {
 				player.getHand().add(drawCard());
 			}
 		}
+		scanner.close();
 	}
 
 	public void playerTurn() {
@@ -78,17 +79,16 @@ public class GameController implements Deck {
 		List<Card> drawnCards = new ArrayList<>();
 
 		for (Player player : players) {
-			while (true) {
-				Card drawnCard = paquetCard.drawCard();
-				player.drawCard(drawnCard);
-				drawnCards.add(drawnCard);
+			Card drawnCard = paquetCard.drawCard();
+			player.drawCard(drawnCard);
+			drawnCards.add(drawnCard);
 
-				// Vérifie si la carte piochée et jouable
-				if (isPlayable(drawnCard)) {
-					currentCardInPlay = drawnCard;
-					return drawnCard;
-				}
+			// Vérifie si la carte piochée et jouable
+			if (isPlayable(drawnCard)) {
+				currentCardInPlay = drawnCard;
+				return drawnCard;
 			}
+
 		}
 		return null;
 	}

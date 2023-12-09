@@ -41,7 +41,7 @@ public class ActionCard extends Card {
 
 	@Override
 	public String toString() {
-		return "ActionType = " + getAction() + ", Description = " + getDescription();
+		return "{ActionType = " + getAction() + ", Description = " + getDescription() + "} ";
 	}
 
 	@Override
