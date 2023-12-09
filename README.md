@@ -59,8 +59,9 @@ La classe `GameRules` contient la logique des règles du jeu Uno.
 
 ### 6. Mon Erreur
 
-1. _Après avoir ajouté les joueurs mon code m'affiche `Le paquet est vide` dans une boucle infinie normalement le code devrait
-   simplement s'arrêter parce que je n'ai pas encore codé la logique pour jouer_
+1. Du coup après la suppression du `while (true)` mon code, il ne réagit pas comme je le voudrais quand je crée plus de 3 joueurs,
+   il va afficher  `le paquet est vide` une dizaine de fois selon le nombre de joueurs puis à la fin il vas afficher la liste mais
+   il y a des éléments `null` dans la list et elle ne crée pas une `NumberCard` pour chaque couleur.
 
 ## Utilisation
 
