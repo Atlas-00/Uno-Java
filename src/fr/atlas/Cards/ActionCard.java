@@ -4,11 +4,11 @@ public class ActionCard extends Card {
 	private final String mActionType;
 	private final String mDescription;
 
-	public ActionCard(String actionType) {
+	public ActionCard( String actionType ) {
 		super("TOUTE"); // Couleur par défaut pour les cartes d'action
 		this.mActionType = actionType;
 
-		// Définir la description en fonction du type d'action
+		// Définie la description en fonction du type d'action
 		switch (actionType.toUpperCase()) {
 			case "REVERSE":
 				this.mDescription = "Inverse le sens du jeu";
@@ -31,7 +31,7 @@ public class ActionCard extends Card {
 		}
 	}
 
-	public String getActionType() {
+	public String getAction() {
 		return mActionType;
 	}
 
@@ -41,7 +41,7 @@ public class ActionCard extends Card {
 
 	@Override
 	public String toString() {
-		return "ActionType = " + getActionType() + ", Description = " + getDescription();
+		return "ActionType = " + getAction() + ", Description = " + getDescription();
 	}
 
 	@Override

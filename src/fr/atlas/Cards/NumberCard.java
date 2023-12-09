@@ -7,10 +7,10 @@ public class NumberCard extends Card {
 	private final int mValue;
 	private final List<Card> mNumberCard;
 
-	public NumberCard(String color, int value) {
+	public NumberCard( String color, int value ) {
 		super(color);
 		this.mValue = value;
-		this.mNumberCard = new ArrayList<Card>();
+		this.mNumberCard = new ArrayList<>();
 	}
 
 	public int getValue() {
@@ -23,7 +23,7 @@ public class NumberCard extends Card {
 	}
 
 	@Override
-    public String toString() {
-        return "Value = " + getValue() + ", Color = " + getColor();
-    }
+	public String toString() {
+		return "Value = " + getValue() + ", Color = " + getColor();
+	}
 }

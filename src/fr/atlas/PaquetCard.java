@@ -1,6 +1,8 @@
 package fr.atlas;
 
-import fr.atlas.Cards.*;
+import fr.atlas.Cards.ActionCard;
+import fr.atlas.Cards.Card;
+import fr.atlas.Cards.NumberCard;
 
 import java.util.*;
 
@@ -10,7 +12,6 @@ public class PaquetCard implements Deck {
 	public PaquetCard() {
 		mPaquet = new LinkedList<>();
 		initializeDeck();
-		shuffle();
 	}
 
 	private void initializeDeck() {
@@ -39,6 +40,10 @@ public class PaquetCard implements Deck {
 
 	@Override
 	public Card drawCard() {
+		if (mPaquet.isEmpty()) {
+			System.out.println("Le paquet est vide");
+			shuffle();
+		}
 		return mPaquet.poll();
 	}
 }

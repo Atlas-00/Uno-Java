@@ -1,6 +1,8 @@
 package fr.atlas;
 
+import fr.atlas.Cards.ActionCard;
 import fr.atlas.Cards.Card;
+import fr.atlas.Cards.NumberCard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,8 @@ public class GameController implements Deck {
 	private final List<Player> players;
 	private final PaquetCard paquetCard;
 	private Player currentPlayer;
+	private Card currentCardInPlay;
+
 
 	public GameController() {
 		this.players = new ArrayList<>();
@@ -47,11 +51,11 @@ public class GameController implements Deck {
 			String name = scanner.next();
 			Player player = new Player(name);
 			players.add(player);
+		}
 
-			// Ajouter les 7 cartes du début à la main du joueur
+		for (Player player : players) {
 			for (int j = 0; j < 7; j++) {
-				Card drawnCard = drawCard();
-				player.drawCard(drawnCard);
+				player.getHand().add(drawCard());
 			}
 		}
 	}
@@ -81,6 +85,7 @@ public class GameController implements Deck {
 
 				// Vérifie si la carte piochée et jouable
 				if (isPlayable(drawnCard)) {
+					currentCardInPlay = drawnCard;
 					return drawnCard;
 				}
 			}
@@ -89,18 +94,25 @@ public class GameController implements Deck {
 	}
 
 	private boolean isPlayable( Card drawnCard ) {
-		// Récupérer la carte actuelle en jeu (par exemple, la dernière carte jouée)
 		Card currentCardInPlay = getCurrentCardInPlay();
 
-		// Vérifier si la couleur ou la valeur correspond
-		return drawnCard.getColor().equals(currentCardInPlay.getColor())
-				|| drawnCard.getValue().equals(currentCardInPlay.getValue());
+		// Si la carte actuelle en jeu est une carte numérique
+		if (currentCardInPlay instanceof NumberCard currentNumberCard && drawnCard instanceof NumberCard drawnNumberCard) {
+			// Vérifie si la couleur ou la valeur correspond
+			return currentNumberCard.getColor().equals(drawnNumberCard.getColor()) ||
+					currentNumberCard.getValue() == drawnNumberCard.getValue();
+		}
+		// Si la carte actuelle en jeu est une carte d'action
+		else if (currentCardInPlay instanceof ActionCard currentActionCard && drawnCard instanceof ActionCard drawnActionCard) {
+			// Vérifie si le type d'action correspond
+			return currentActionCard.getAction().equals(drawnActionCard.getAction());
+		}
+
+		// Si les types de cartes ne correspondent pas, la carte est non jouable
+		return false;
 	}
 
 	private Card getCurrentCardInPlay() {
-		// Ajoutez votre logique pour récupérer la carte actuellement en jeu
-		// Cela dépendra de la façon dont vous gérez les tours et les cartes jouées.
-		// Par exemple, vous pourriez avoir une variable qui représente la dernière carte jouée.
-		return null; // Pour l'exemple, retourne null
+		return currentCardInPlay;
 	}
 }
