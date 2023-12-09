@@ -1,42 +1,44 @@
 package fr.atlas;
 
-import fr.atlas.Cards.ActionCard;
-import fr.atlas.Cards.Card;
-import fr.atlas.Cards.NumberCard;
+import fr.atlas.Cards.*;
 
 import java.util.*;
 
-public class PaquetCard implements Deck{
-	private Queue<Card> mPaquet;
+public class PaquetCard implements Deck {
+	private final Queue<Card> mPaquet;
 
 	public PaquetCard() {
-		List<Card> temp = new ArrayList<>();
+		mPaquet = new LinkedList<>();
+		initializeDeck();
+		shuffle();
+	}
 
-		ActionCard actionCardReverse = new ActionCard("REVERSE");
-		ActionCard actionCardSkip = new ActionCard("SKIP");
-		ActionCard actionCardDrawTwo = new ActionCard("DRAW_TWO");
-		ActionCard actionCardWildDrawFour = new ActionCard("WILD_DRAW_FOUR");
-		ActionCard actionCardWild = new ActionCard("WILD");
+	private void initializeDeck() {
+		// Ajout des cartes d'action
+		mPaquet.add(new ActionCard("REVERSE"));
+		mPaquet.add(new ActionCard("SKIP"));
+		mPaquet.add(new ActionCard("DRAW_TWO"));
+		mPaquet.add(new ActionCard("WILD_DRAW_FOUR"));
+		mPaquet.add(new ActionCard("WILD"));
 
-		temp.add(actionCardReverse);
-		temp.add(actionCardSkip);
-		temp.add(actionCardDrawTwo);
-		temp.add(actionCardWildDrawFour);
-		temp.add(actionCardWild);
-		temp.add(new NumberCard());
-
-		this.mPaquet = new PriorityQueue<>();
-		Collections.shuffle(temp);
-		this.mPaquet.addAll(temp);
+		// Ajout des cartes numériques pour chaque couleur
+		for (String color : Card.COLORS) {
+			for (int value = 0; value <= 9; value++) {
+				mPaquet.add(new NumberCard(color, value));
+			}
+		}
 	}
 
 	@Override
 	public void shuffle() {
-
+		List<Card> temp = new ArrayList<>(mPaquet);
+		Collections.shuffle(temp);
+		mPaquet.clear();
+		mPaquet.addAll(temp);
 	}
 
 	@Override
 	public Card drawCard() {
-		return null;
+		return mPaquet.poll();
 	}
 }

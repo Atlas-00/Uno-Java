@@ -1,13 +1,17 @@
 package fr.atlas.Cards;
 
 public abstract class Card {
-	public abstract void playCard();
-	private final String color;
+	public static final String[] COLORS = {"ROUGE", "BLEU", "VERT", "JAUNE"};
 
-	public Card(String color) {
-		this.color = color;
+	private final String mColor;
+
+	public Card( String color ) {
+		this.mColor = color;
 	}
+
 	public String getColor() {
-		return color;
+		return mColor;
 	}
+
+	public abstract void playCard();
 }

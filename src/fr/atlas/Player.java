@@ -9,7 +9,7 @@ public class Player {
 	private final String mName;
 	private final List<Card> mHand;
 
-	public Player(String name) {
+	public Player( String name ) {
 		this.mName = name;
 		this.mHand = new ArrayList<>();
 	}
@@ -22,11 +22,11 @@ public class Player {
 		return mHand;
 	}
 
-	public void setNewHand(Card newHand) {
+	public void setNewHand( Card newHand ) {
 		mHand.add(newHand);
 	}
 
-	public void drawCard( Card card) {
+	public void drawCard( Card card ) {
 		mHand.add(card);
 	}
 }

@@ -20,10 +20,10 @@ public class ActionCard extends Card {
 				this.mDescription = "Piochez deux cartes";
 				break;
 			case "WILD_DRAW_FOUR":
-				this.mDescription = "Wild Draw Four - Piochez quatre cartes";
+				this.mDescription = "Piochez quatre cartes";
 				break;
 			case "WILD":
-				this.mDescription = "Wild - Change de couleur";
+				this.mDescription = "Change de couleur";
 				break;
 			default:
 				this.mDescription = "Description non spécifiée";
@@ -37,6 +37,11 @@ public class ActionCard extends Card {
 
 	public String getDescription() {
 		return mDescription;
+	}
+
+	@Override
+	public String toString() {
+		return "ActionType = " + getActionType() + ", Description = " + getDescription();
 	}
 
 	@Override
