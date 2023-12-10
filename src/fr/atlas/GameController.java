@@ -1,8 +1,6 @@
 package fr.atlas;
 
-import fr.atlas.Cards.ActionCard;
 import fr.atlas.Cards.Card;
-import fr.atlas.Cards.NumberCard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +9,7 @@ import java.util.Scanner;
 public class GameController implements Deck {
 	private final List<Player> players;
 	private final PaquetCard paquetCard;
+	Card initializer;
 	private Player currentPlayer;
 	private Card currentCardInPlay;
 
@@ -20,7 +19,7 @@ public class GameController implements Deck {
 	}
 
 	public void startGame() {
-		System.out.println("Starting Uno Game");
+		System.out.println("\t\t\t\t\t\tStarting Uno Game");
 		System.out.println("================================================================\n");
 
 		// Ajout des players
@@ -33,7 +32,7 @@ public class GameController implements Deck {
 		currentPlayer = players.getFirst();
 
 		// Initialisation de la première carte
-		Card initializer = paquetCard.drawCard();
+		initializer = paquetCard.drawCard();
 
 		// Commencer le premier tour
 		playerTurn();
@@ -80,24 +79,39 @@ public class GameController implements Deck {
 
 	public void playerTurn() {
 		Scanner scanner = new Scanner(System.in);
+		// Afficher la carte actuellement en jeu
+		currentCardInPlay = initializer;
+		System.out.println("\nLa carte actuelle en jeu : " + currentCardInPlay);
 
-		System.out.println(currentPlayer.getName() + " Commence!");
-		System.out.println("Les carte de ".concat(currentPlayer.getName()) + " : ");
-
-		for (Card card : currentPlayer.getHand()) {
-			System.out.println("\t" + card.toString());
+		// Afficher les cartes du joueur
+		System.out.println("Les cartes de " + currentPlayer.getName() + " : ");
+		for (int i = 0; i < currentPlayer.getHand().size(); i++) {
+			System.out.println("\t" + (i + 1) + ". " + currentPlayer.getHand().get(i).toString());
 		}
 
-		System.out.print("\nVeuillez saisir la carte que vous voulez jouer : ");
+		// Saisir la carte que le joueur veut jouer
+		System.out.print("\nVeuillez saisir le numéro de la carte que vous voulez jouer : ");
 		int cardIndex = scanner.nextInt();
 		cardIndex--;
 
+		// Vérifier si la carte est jouable en utilisant la méthode isPlayable()
 		if (cardIndex >= 0 && cardIndex < currentPlayer.getHand().size()) {
-			currentCardInPlay = currentPlayer.getHand().get(cardIndex);
-			System.out.println("Vous avez la jouez carte " + currentCardInPlay);
+			Card selectedCard = currentPlayer.getHand().get(cardIndex);
+			if (GameRules.isPlayable(currentCardInPlay, selectedCard)) {
+				// Le joueur peut jouer la carte
+				currentPlayer.getHand().remove(cardIndex);
+				System.out.println(currentPlayer.getName() + " a joué la carte " + currentCardInPlay);
+				currentCardInPlay = selectedCard;
+			} else {
+				// La carte n'est pas jouable
+				System.out.println("Vous ne pouvez pas jouer la carte " + selectedCard);
+			}
 		} else {
-			System.out.println("La carte que vous avez choisie n'existe pas !!");
+			// Numéro de carte invalide
+			System.out.println("Le numéro de carte que vous avez choisi n'est pas valide !");
 		}
+
+		scanner.close();
 	}
 
 	public void nextTurn() {
@@ -126,7 +140,7 @@ public class GameController implements Deck {
 				}
 
 				// Vérifier si la carte piochée est jouable
-				if (isPlayable(drawnCard)) {
+				if (GameRules.isPlayable(currentCardInPlay, drawnCard)) {
 					currentCardInPlay = drawnCard;
 					return drawnCard;
 				}
@@ -137,28 +151,5 @@ public class GameController implements Deck {
 		} while (drawnCard == null);
 
 		return null;
-	}
-
-	private boolean isPlayable( Card drawnCard ) {
-		Card currentCardInPlay = getCurrentCardInPlay();
-
-		// Si la carte actuelle en jeu est une carte numérique
-		if (currentCardInPlay instanceof NumberCard currentNumberCard && drawnCard instanceof NumberCard drawnNumberCard) {
-			// Vérifie si la couleur ou la valeur correspond
-			return currentNumberCard.getColor().equals(drawnNumberCard.getColor()) ||
-					currentNumberCard.getValue() == drawnNumberCard.getValue();
-		}
-		// Si la carte actuelle en jeu est une carte d'action
-		else if (currentCardInPlay instanceof ActionCard currentActionCard && drawnCard instanceof ActionCard drawnActionCard) {
-			// Vérifie si le type d'action correspond
-			return currentActionCard.getAction().equals(drawnActionCard.getAction());
-		}
-
-		// Si les types de cartes ne correspondent pas, la carte est non jouable
-		return false;
-	}
-
-	private Card getCurrentCardInPlay() {
-		return currentCardInPlay;
 	}
 }
