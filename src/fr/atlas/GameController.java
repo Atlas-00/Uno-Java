@@ -37,6 +37,9 @@ public class GameController implements Deck {
 
 		// Commencer le premier tour
 		playerTurn();
+
+		// Faire jouer les autres joueurs
+		nextTurn();
 	}
 
 	public void addPlayer() {
@@ -78,7 +81,7 @@ public class GameController implements Deck {
 	public void playerTurn() {
 		Scanner scanner = new Scanner(System.in);
 
-		System.out.println("Le jeux commence !, " + currentPlayer.getName() + " Commence!");
+		System.out.println(currentPlayer.getName() + " Commence!");
 		System.out.println("Les carte de ".concat(currentPlayer.getName()) + " : ");
 
 		for (Card card : currentPlayer.getHand()) {
@@ -99,6 +102,10 @@ public class GameController implements Deck {
 
 	public void nextTurn() {
 		// Logique pour le prochain tour
+		for (int i = 1; i < players.size(); i++) {
+			currentPlayer = players.get(i);
+			playerTurn();
+		}
 	}
 
 	@Override
