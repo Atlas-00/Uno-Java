@@ -18,7 +18,7 @@ public class GameController implements Deck {
 		this.paquetCard = new PaquetCard();
 	}
 
-	private void startGame() {
+	public void startGame() {
 		System.out.println("\t\t\t\t\t\tStarting Uno Game");
 		System.out.println("================================================================\n");
 
@@ -110,8 +110,6 @@ public class GameController implements Deck {
 			// Numéro de carte invalide
 			System.out.println("Le numéro de carte que vous avez choisi n'est pas valide !");
 		}
-
-		scanner.close();
 	}
 
 	private void nextTurn() {
