@@ -35,4 +35,3 @@ public class GameRules {
 		return false;
 	}
 }
-

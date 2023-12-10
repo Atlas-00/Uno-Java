@@ -18,7 +18,7 @@ public class GameController implements Deck {
 		this.paquetCard = new PaquetCard();
 	}
 
-	public void startGame() {
+	private void startGame() {
 		System.out.println("\t\t\t\t\t\tStarting Uno Game");
 		System.out.println("================================================================\n");
 
@@ -41,7 +41,7 @@ public class GameController implements Deck {
 		nextTurn();
 	}
 
-	public void addPlayer() {
+	private void addPlayer() {
 		Scanner scanner = new Scanner(System.in);
 
 		int nbPlayer;
@@ -77,7 +77,7 @@ public class GameController implements Deck {
 		}
 	}
 
-	public void playerTurn() {
+	private void playerTurn() {
 		Scanner scanner = new Scanner(System.in);
 		// Afficher la carte actuellement en jeu
 		currentCardInPlay = initializer;
@@ -114,7 +114,7 @@ public class GameController implements Deck {
 		scanner.close();
 	}
 
-	public void nextTurn() {
+	private void nextTurn() {
 		// Logique pour le prochain tour
 		for (int i = 1; i < players.size(); i++) {
 			currentPlayer = players.get(i);
