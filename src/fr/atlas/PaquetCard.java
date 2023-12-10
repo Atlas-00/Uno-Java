@@ -42,7 +42,7 @@ public class PaquetCard implements Deck {
 	public Card drawCard() {
 		if (mPaquet.isEmpty()) {
 			System.out.println("Le paquet est vide");
-//			shuffle();
+			shuffle();
 		}
 		return mPaquet.poll();
 	}

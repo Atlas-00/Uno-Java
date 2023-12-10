@@ -14,15 +14,20 @@ public class GameController implements Deck {
 	private Player currentPlayer;
 	private Card currentCardInPlay;
 
-
 	public GameController() {
 		this.players = new ArrayList<>();
 		this.paquetCard = new PaquetCard();
 	}
 
 	public void startGame() {
+		System.out.println("Starting Uno Game");
+		System.out.println("================================================================\n");
+
 		// Ajout des players
 		addPlayer();
+
+		// Distributions des cards
+		distributeInitialCards();
 
 		// Initialiser le joueur actuel
 		currentPlayer = players.getFirst();
@@ -37,14 +42,15 @@ public class GameController implements Deck {
 	public void addPlayer() {
 		Scanner scanner = new Scanner(System.in);
 
-		System.out.print("Vous allez jouer à combien : ");
-		int nbPlayer = scanner.nextInt();
+		int nbPlayer;
+		do {
+			System.out.print("Vous allez jouer à combien (au moins 2) : ");
+			nbPlayer = scanner.nextInt();
 
-		if (nbPlayer < 2) {
-			System.out.println("Vous ne pouvez pas jouer avec moins de 2 joueurs !");
-			addPlayer(); // Demande à l'utilisateur de saisir à nouveau le nombre de joueurs
-			return;
-		}
+			if (nbPlayer < 2) {
+				System.out.println("Vous ne pouvez pas jouer avec moins de 2 joueurs !");
+			}
+		} while (nbPlayer < 2);
 
 		for (int i = 1; i <= nbPlayer; i++) {
 			System.out.print("Veuillez saisir le nom du joueur n°" + i + " : ");
@@ -52,17 +58,43 @@ public class GameController implements Deck {
 			Player player = new Player(name);
 			players.add(player);
 		}
+	}
 
+	private void distributeInitialCards() {
 		for (Player player : players) {
 			for (int j = 0; j < 7; j++) {
-				player.getHand().add(drawCard());
+				paquetCard.shuffle();
+				Card drawnCard = paquetCard.drawCard();
+				if (drawnCard != null) {
+					player.getHand().add(drawnCard);
+				} else {
+					paquetCard.shuffle();
+					j--;
+				}
 			}
 		}
-		scanner.close();
 	}
 
 	public void playerTurn() {
-		System.out.println(currentPlayer.getHand());
+		Scanner scanner = new Scanner(System.in);
+
+		System.out.println("Le jeux commence !, " + currentPlayer.getName() + " Commence!");
+		System.out.println("Les carte de ".concat(currentPlayer.getName()) + " : ");
+
+		for (Card card : currentPlayer.getHand()) {
+			System.out.println("\t" + card.toString());
+		}
+
+		System.out.print("\nVeuillez saisir la carte que vous voulez jouer : ");
+		int cardIndex = scanner.nextInt();
+		cardIndex--;
+
+		if (cardIndex >= 0 && cardIndex < currentPlayer.getHand().size()) {
+			currentCardInPlay = currentPlayer.getHand().get(cardIndex);
+			System.out.println("Vous avez la jouez carte " + currentCardInPlay);
+		} else {
+			System.out.println("La carte que vous avez choisie n'existe pas !!");
+		}
 	}
 
 	public void nextTurn() {
@@ -76,20 +108,27 @@ public class GameController implements Deck {
 
 	@Override
 	public Card drawCard() {
-		List<Card> drawnCards = new ArrayList<>();
+		Card drawnCard;
 
-		for (Player player : players) {
-			Card drawnCard = paquetCard.drawCard();
-			player.drawCard(drawnCard);
-			drawnCards.add(drawnCard);
+		do {
+			drawnCard = paquetCard.drawCard();
+			if (drawnCard != null) {
+				// Distribuer la carte à tous les joueurs
+				for (Player player : players) {
+					player.drawCard(drawnCard);
+				}
 
-			// Vérifie si la carte piochée et jouable
-			if (isPlayable(drawnCard)) {
-				currentCardInPlay = drawnCard;
-				return drawnCard;
+				// Vérifier si la carte piochée est jouable
+				if (isPlayable(drawnCard)) {
+					currentCardInPlay = drawnCard;
+					return drawnCard;
+				}
+			} else {
+				// Si le paquet est vide, mélanger et réessayer
+				paquetCard.shuffle();
 			}
+		} while (drawnCard == null);
 
-		}
 		return null;
 	}
 
