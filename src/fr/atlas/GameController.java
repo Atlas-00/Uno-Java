@@ -79,32 +79,41 @@ public class GameController implements Deck {
 
 	private void playerTurn() {
 		Scanner scanner = new Scanner(System.in);
-		// Afficher la carte actuellement en jeu
+		// Affiche la carte actuellement en jeu
 		currentCardInPlay = initializer;
 		System.out.println("\nLa carte actuelle en jeu : " + currentCardInPlay);
 
-		// Afficher les cartes du joueur
+		// Affiche les cartes du joueur
 		System.out.println("Les cartes de " + currentPlayer.getName() + " : ");
 		for (int i = 0; i < currentPlayer.getHand().size(); i++) {
 			System.out.println("\t" + (i + 1) + ". " + currentPlayer.getHand().get(i).toString());
 		}
 
-		// Saisir la carte que le joueur veut jouer
+		// Saisi la carte que le joueur veut jouer
 		System.out.print("\nVeuillez saisir le numéro de la carte que vous voulez jouer : ");
 		int cardIndex = scanner.nextInt();
 		cardIndex--;
 
-		// Vérifier si la carte est jouable en utilisant la méthode isPlayable()
+		// Vérifie si la carte est jouable en utilisant la méthode isPlayable()
 		if (cardIndex >= 0 && cardIndex < currentPlayer.getHand().size()) {
 			Card selectedCard = currentPlayer.getHand().get(cardIndex);
 			if (GameRules.isPlayable(currentCardInPlay, selectedCard)) {
 				// Le joueur peut jouer la carte
+				currentCardInPlay = selectedCard;
 				currentPlayer.getHand().remove(cardIndex);
 				System.out.println(currentPlayer.getName() + " a joué la carte " + currentCardInPlay);
 				currentCardInPlay = selectedCard;
 			} else {
 				// La carte n'est pas jouable
 				System.out.println("Vous ne pouvez pas jouer la carte " + selectedCard);
+				System.out.println("Vous devez piocher ");
+
+				// Pioche une carte et l'ajoute à la main du joueur
+				Card piocherCard = paquetCard.drawCard();
+				currentPlayer.drawCard(piocherCard);
+
+				System.out.println("Vous avez pioché " + piocherCard);
+
 			}
 		} else {
 			// Numéro de carte invalide

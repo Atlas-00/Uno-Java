@@ -12,6 +12,4 @@ public abstract class Card {
 	public String getColor() {
 		return mColor;
 	}
-
-	public abstract void playCard();
 }

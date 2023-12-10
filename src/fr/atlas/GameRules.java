@@ -18,7 +18,8 @@ public class GameRules {
 	}
 
 	private static boolean isNumberCardPlayable( NumberCard currentNumberCard, NumberCard drawnNumberCard ) {
-		return currentNumberCard.getColor().equals(drawnNumberCard.getColor()) || currentNumberCard.getValue() == drawnNumberCard.getValue();
+		return currentNumberCard.getColor().equals(drawnNumberCard.getColor()) ||
+				currentNumberCard.getValue() == drawnNumberCard.getValue();
 	}
 
 	private static boolean isActionCardPlayable( ActionCard currentActionCard, ActionCard drawnActionCard ) {

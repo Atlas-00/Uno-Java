@@ -22,10 +22,6 @@ public class Player {
 		return mHand;
 	}
 
-	public void setNewHand( Card newHand ) {
-		mHand.add(newHand);
-	}
-
 	public void drawCard( Card card ) {
 		mHand.add(card);
 	}
