@@ -24,7 +24,7 @@ public class PaquetCard implements Deck {
 
 		// Ajout des cartes numériques pour chaque couleur
 		for (String color : Card.COLORS) {
-			for (int value = 0; value <= 9; value++) {
+			for (int value = 1; value <= 9; value++) {
 				mPaquet.add(new NumberCard(color, value));
 			}
 		}

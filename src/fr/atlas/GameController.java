@@ -1,5 +1,6 @@
 package fr.atlas;
 
+import fr.atlas.Cards.ActionCard;
 import fr.atlas.Cards.Card;
 
 import java.util.ArrayList;
@@ -97,23 +98,27 @@ public class GameController implements Deck {
 		// Vérifie si la carte est jouable en utilisant la méthode isPlayable()
 		if (cardIndex >= 0 && cardIndex < currentPlayer.getHand().size()) {
 			Card selectedCard = currentPlayer.getHand().get(cardIndex);
-			if (GameRules.isPlayable(currentCardInPlay, selectedCard)) {
-				// Le joueur peut jouer la carte
-				currentCardInPlay = selectedCard;
-				currentPlayer.getHand().remove(cardIndex);
-				System.out.println(currentPlayer.getName() + " a joué la carte " + currentCardInPlay);
-				currentCardInPlay = selectedCard;
+			if (selectedCard instanceof ActionCard actionCard) {
+				applyActionEffect(actionCard);
 			} else {
-				// La carte n'est pas jouable
-				System.out.println("Vous ne pouvez pas jouer la carte " + selectedCard);
-				System.out.println("Vous devez piocher ");
+				if (GameRules.isPlayable(currentCardInPlay, selectedCard)) {
+					// Le joueur peut jouer la carte
+					currentCardInPlay = selectedCard;
+					currentPlayer.getHand().remove(cardIndex);
+					System.out.println(currentPlayer.getName() + " a joué la carte " + currentCardInPlay);
+					currentCardInPlay = selectedCard;
+				} else {
+					// La carte n'est pas jouable
+					System.out.println("Vous ne pouvez pas jouer la carte " + selectedCard);
+					System.out.println("Vous devez piocher ");
 
-				// Pioche une carte et l'ajoute à la main du joueur
-				Card piocherCard = paquetCard.drawCard();
-				currentPlayer.drawCard(piocherCard);
+					// Pioche une carte et l'ajoute à la main du joueur
+					Card piocherCard = paquetCard.drawCard();
+					currentPlayer.drawCard(piocherCard);
 
-				System.out.println("Vous avez pioché " + piocherCard);
+					System.out.println("Vous avez pioché la carte" + piocherCard);
 
+				}
 			}
 		} else {
 			// Numéro de carte invalide
@@ -127,6 +132,49 @@ public class GameController implements Deck {
 			currentPlayer = players.get(i);
 			playerTurn();
 		}
+	}
+
+	private void applyActionEffect( Card actionCard ) {
+		// Appelle la méthode appropriée en fonction du type de carte d'action
+		if (actionCard instanceof ActionCard action) {
+			switch (action.getAction()) {
+				case "REVERSE":
+					applyReverseAction();
+					break;
+				case "SKIP":
+					applySkipAction();
+					break;
+				case "DRAW_TWO":
+					applyDrawTwoAction();
+					break;
+				case "WILD_DRAW_FOUR":
+					applyWildDrawFourAction();
+					break;
+				case "WILD":
+					applyWildAction();
+					break;
+			}
+		}
+	}
+
+	private void applyReverseAction() {
+		System.out.println("REVERSE");
+	}
+
+	private void applySkipAction() {
+		System.out.println("SKIP");
+	}
+
+	private void applyDrawTwoAction() {
+		System.out.println("DRAW_TWO");
+	}
+
+	private void applyWildDrawFourAction() {
+		System.out.println("WILD_DRAW_FOUR");
+	}
+
+	private void applyWildAction() {
+		System.out.println("WILD");
 	}
 
 	@Override
