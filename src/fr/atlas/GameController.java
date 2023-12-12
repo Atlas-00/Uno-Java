@@ -128,10 +128,16 @@ public class GameController implements Deck {
 
 	private void nextTurn() {
 		// Logique pour le prochain tour
-		for (int i = 1; i < players.size(); i++) {
-			currentPlayer = players.get(i);
-			playerTurn();
-		}
+		do {
+			for (int i = 0; i < players.size(); i++) {
+				currentPlayer = players.get(i);
+				playerTurn();
+				if (i == players.size() - 1) {
+					// Réinitialiser l'index du joueur à zéro pour revenir au premier joueur
+					i = - 1;
+				}
+			}
+		} while (! GameRules.isGameOver(players));
 	}
 
 	private void applyActionEffect( Card actionCard ) {
