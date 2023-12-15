@@ -3,7 +3,10 @@ package fr.atlas;
 import fr.atlas.Cards.ActionCard;
 import fr.atlas.Cards.Card;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 
 public class GameController implements Deck {
 	private final List<Player> players;
@@ -165,7 +168,7 @@ public class GameController implements Deck {
 	}
 
 	private void applyReverseAction() {
-
+		System.out.println("REVERSE");
 	}
 
 	private void applySkipAction() {
@@ -181,12 +184,13 @@ public class GameController implements Deck {
 	}
 
 	private void applyDrawTwoAction( Player player ) {
+		skipNextPlayerTurn();
 		for (int i = 0; i < 2; i++) {
 			Card card = drawCard();
 			if (card != null) {
 				player.getHand().add(card);
 			} else {
-				shuffle();
+				paquetCard.shuffle();
 				i--;
 			}
 		}
@@ -205,7 +209,17 @@ public class GameController implements Deck {
 		skipNextPlayerTurn();
 
 		// Faire piocher quatre cartes au joueur suivant
-		drawCardsForPlayer(currentPlayer);
+		drawCardsFourForPlayer(currentPlayer);
+	}
+
+	private void applyWildAction() {
+		// Demander au joueur actuel de choisir une nouvelle couleur
+		String chosenColor = askPlayerForColorSelection();
+
+		// Mettre à jour la couleur de la carte en jeu
+		currentCardInPlay.setColor(chosenColor);
+
+		System.out.println("La nouvelle couleur choisie est : " + chosenColor);
 	}
 
 	private String askPlayerForColorSelection() {
@@ -241,7 +255,7 @@ public class GameController implements Deck {
 		currentPlayer = players.get(nextPlayerIndex);
 	}
 
-	private void drawCardsForPlayer( Player player ) {
+	private void drawCardsFourForPlayer( Player player ) {
 		for (int i = 0; i < 4; i++) {
 			Card drawnCard = drawCard();
 			if (drawnCard != null) {
@@ -251,22 +265,6 @@ public class GameController implements Deck {
 				i--;
 			}
 		}
-	}
-
-	private void applyWildAction() {
-		Scanner scanner = new Scanner(System.in);
-		String color;
-
-		do {
-			System.out.print("Veuillez saisir la couleur que vous voulez joué : ");
-			color = scanner.next();
-
-			if (! Objects.equals(color, Arrays.toString(Card.COLORS))) {
-				System.out.println("Veuillez saisir une de ces couleur la : " + Arrays.toString(Card.COLORS));
-			} else {
-				currentCardInPlay.setColor(color);
-			}
-		} while (! Objects.equals(color, Arrays.toString(Card.COLORS)));
 	}
 
 	@Override

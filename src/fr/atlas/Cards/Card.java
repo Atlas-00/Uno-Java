@@ -2,7 +2,6 @@ package fr.atlas.Cards;
 
 public abstract class Card {
 	public static final String[] COLORS = {"ROUGE", "BLEU", "VERT", "JAUNE"};
-
 	private String mColor;
 
 	public Card( String color ) {
