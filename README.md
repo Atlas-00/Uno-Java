@@ -55,14 +55,6 @@ La classe `GameRules` contient la logique des règles du jeu Uno.
 - **Méthodes :**
     - Méthodes pour vérifier la validité d'un coup.
     - Méthodes pour détecter la fin de la partie.
-    - Autres règles spécifiques au jeu Uno.
-
-### Mon problème
-
-1. Dans la méthode `nextTurn` je n'arrive pas à faire que le premier joue et, qu'il passe au second ainsi de suite jusqu'à qu'un
-   joueur gagne le code, il fait chaque joueur joué 2 fois.
-2. Ouais et la variable `currentCardInPlay` je n'arrive pas à la modifier pour quelle donne vraiment la card qui est en jeux
-3. dites-moi si j'ai des choses a amélioré niveau logique ou code merci pour votre aide
 
 ## Utilisation
 

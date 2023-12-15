@@ -30,6 +30,7 @@ public class GameRules {
 		// Logique pour déterminer si le jeu est terminé (Si un joueur a vidé sa main)
 		for (Player player : players) {
 			if (player.getHand().isEmpty()) {
+				System.out.println("Le joueur ".concat(player.getName() + " à gagné !"));
 				return true;
 			}
 		}

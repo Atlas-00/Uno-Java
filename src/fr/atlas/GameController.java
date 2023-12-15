@@ -3,14 +3,11 @@ package fr.atlas;
 import fr.atlas.Cards.ActionCard;
 import fr.atlas.Cards.Card;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class GameController implements Deck {
 	private final List<Player> players;
 	private final PaquetCard paquetCard;
-	Card initializer;
 	private Player currentPlayer;
 	private Card currentCardInPlay;
 
@@ -31,9 +28,6 @@ public class GameController implements Deck {
 
 		// Initialiser le joueur actuel
 		currentPlayer = players.getFirst();
-
-		// Initialisation de la première carte
-		initializer = paquetCard.drawCard();
 
 		// Commencer le premier tour
 		playerTurn();
@@ -64,24 +58,32 @@ public class GameController implements Deck {
 	}
 
 	private void distributeInitialCards() {
-		for (Player player : players) {
-			for (int j = 0; j < 7; j++) {
-				paquetCard.shuffle();
+		for (int i = 0; i < 7; i++) {
+			for (Player player : players) {
 				Card drawnCard = paquetCard.drawCard();
+
 				if (drawnCard != null) {
+					// Si la carte tirée est une ActionCard, mélanger le paquet et continuer à piocher
+					if (drawnCard instanceof ActionCard) {
+						paquetCard.shuffle();
+					} else {
+						// Sinon, initialiser currentCardInPlay avec la carte numérique tirée
+						currentCardInPlay = drawnCard;
+					}
+
+					// Ajouter la carte à la main du joueur
 					player.getHand().add(drawnCard);
 				} else {
 					paquetCard.shuffle();
-					j--;
 				}
 			}
 		}
 	}
 
-	private void playerTurn() {
+	public void playerTurn() {
 		Scanner scanner = new Scanner(System.in);
+
 		// Affiche la carte actuellement en jeu
-		currentCardInPlay = initializer;
 		System.out.println("\nLa carte actuelle en jeu : " + currentCardInPlay);
 
 		// Affiche les cartes du joueur
@@ -100,12 +102,12 @@ public class GameController implements Deck {
 			Card selectedCard = currentPlayer.getHand().get(cardIndex);
 			if (selectedCard instanceof ActionCard actionCard) {
 				applyActionEffect(actionCard);
+				currentPlayer.getHand().remove(selectedCard);
 			} else {
 				if (GameRules.isPlayable(currentCardInPlay, selectedCard)) {
 					// Le joueur peut jouer la carte
-					currentCardInPlay = selectedCard;
 					currentPlayer.getHand().remove(cardIndex);
-					System.out.println(currentPlayer.getName() + " a joué la carte " + currentCardInPlay);
+					System.out.println(currentPlayer.getName() + " a joué la carte " + selectedCard);
 					currentCardInPlay = selectedCard;
 				} else {
 					// La carte n'est pas jouable
@@ -116,8 +118,7 @@ public class GameController implements Deck {
 					Card piocherCard = paquetCard.drawCard();
 					currentPlayer.drawCard(piocherCard);
 
-					System.out.println("Vous avez pioché la carte" + piocherCard);
-
+					System.out.println("Vous avez pioché la carte " + piocherCard);
 				}
 			}
 		} else {
@@ -129,15 +130,15 @@ public class GameController implements Deck {
 	private void nextTurn() {
 		// Logique pour le prochain tour
 		do {
-			for (int i = 0; i < players.size(); i++) {
+			for (int i = 1; i < players.size(); i++) {
 				currentPlayer = players.get(i);
 				playerTurn();
+
 				if (i == players.size() - 1) {
-					// Réinitialiser l'index du joueur à zéro pour revenir au premier joueur
 					i = - 1;
 				}
 			}
-		} while (! GameRules.isGameOver(players));
+		} while (GameRules.isGameOver(players));
 	}
 
 	private void applyActionEffect( Card actionCard ) {
@@ -151,7 +152,7 @@ public class GameController implements Deck {
 					applySkipAction();
 					break;
 				case "DRAW_TWO":
-					applyDrawTwoAction();
+					applyDrawTwoAction(currentPlayer);
 					break;
 				case "WILD_DRAW_FOUR":
 					applyWildDrawFourAction();
@@ -164,23 +165,108 @@ public class GameController implements Deck {
 	}
 
 	private void applyReverseAction() {
-		System.out.println("REVERSE");
+
 	}
 
 	private void applySkipAction() {
-		System.out.println("SKIP");
+		int currentPlayerIndex = players.indexOf(currentPlayer);
+
+		// Calculer l'index du prochain joueur après le saut de tour
+		int nextPlayerIndex = (currentPlayerIndex + 2) % players.size();
+
+		// Mettre à jour le joueur actuel avec le joueur suivant
+		currentPlayer = players.get(nextPlayerIndex);
+
+		System.out.println("Le tour du prochain joueur (" + currentPlayer.getName() + ") est sauté !");
 	}
 
-	private void applyDrawTwoAction() {
-		System.out.println("DRAW_TWO");
+	private void applyDrawTwoAction( Player player ) {
+		for (int i = 0; i < 2; i++) {
+			Card card = drawCard();
+			if (card != null) {
+				player.getHand().add(card);
+			} else {
+				shuffle();
+				i--;
+			}
+		}
 	}
 
 	private void applyWildDrawFourAction() {
-		System.out.println("WILD_DRAW_FOUR");
+		// Demander au joueur actuel de choisir une nouvelle couleur
+		String chosenColor = askPlayerForColorSelection();
+
+		// Mettre à jour la couleur de la carte en jeu
+		currentCardInPlay.setColor(chosenColor);
+
+		System.out.println("La nouvelle couleur choisie est : " + chosenColor);
+
+		// Sauter le tour du joueur suivant
+		skipNextPlayerTurn();
+
+		// Faire piocher quatre cartes au joueur suivant
+		drawCardsForPlayer(currentPlayer);
+	}
+
+	private String askPlayerForColorSelection() {
+		Scanner scanner = new Scanner(System.in);
+
+		System.out.println("\nListe des couleurs disponibles : ");
+		for (String cardColor : Card.COLORS) {
+			System.out.println("\t" + cardColor);
+		}
+
+		String color;
+		boolean validColor;
+
+		do {
+			System.out.print("\nVeuillez saisir la couleur que vous voulez jouer : ");
+			color = scanner.next();
+
+			// Vérifier si la couleur est valide
+			validColor = Arrays.asList(Card.COLORS).contains(color.toUpperCase());
+
+			if (! validColor) {
+				System.out.println("La couleur choisie est invalide. Veuillez choisir parmi les couleurs disponibles.");
+			}
+
+		} while (! validColor);
+
+		return color.toUpperCase();
+	}
+
+	private void skipNextPlayerTurn() {
+		int currentPlayerIndex = players.indexOf(currentPlayer);
+		int nextPlayerIndex = (currentPlayerIndex + 1) % players.size();
+		currentPlayer = players.get(nextPlayerIndex);
+	}
+
+	private void drawCardsForPlayer( Player player ) {
+		for (int i = 0; i < 4; i++) {
+			Card drawnCard = drawCard();
+			if (drawnCard != null) {
+				player.getHand().add(drawnCard);
+			} else {
+				paquetCard.shuffle();
+				i--;
+			}
+		}
 	}
 
 	private void applyWildAction() {
-		System.out.println("WILD");
+		Scanner scanner = new Scanner(System.in);
+		String color;
+
+		do {
+			System.out.print("Veuillez saisir la couleur que vous voulez joué : ");
+			color = scanner.next();
+
+			if (! Objects.equals(color, Arrays.toString(Card.COLORS))) {
+				System.out.println("Veuillez saisir une de ces couleur la : " + Arrays.toString(Card.COLORS));
+			} else {
+				currentCardInPlay.setColor(color);
+			}
+		} while (! Objects.equals(color, Arrays.toString(Card.COLORS)));
 	}
 
 	@Override
