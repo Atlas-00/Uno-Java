@@ -56,6 +56,13 @@ La classe `GameRules` contient la logique des règles du jeu Uno.
     - Méthodes pour vérifier la validité d'un coup.
     - Méthodes pour détecter la fin de la partie.
 
+### 6. `Mon problème`
+
+- **Problème des ActionsCard :**
+    - quand mon joueur joue une carte `DRAW_TWO` ou `WILD_DRAW_FOUR` le program est censé ajouter 2 ou 4 carte à la `player.getHand(),`
+      du joueur suivant mais le program en à décider autrement, il ajoute trop de carte à chaque fois et je ne s'ai pas comment faire
+      pour corriger ce bug
+
 ## Utilisation
 
 1. Clonez le projet.
