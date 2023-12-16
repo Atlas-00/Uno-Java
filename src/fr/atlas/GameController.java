@@ -3,10 +3,7 @@ package fr.atlas;
 import fr.atlas.Cards.ActionCard;
 import fr.atlas.Cards.Card;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class GameController implements Deck {
 	private final List<Player> players;
@@ -132,6 +129,7 @@ public class GameController implements Deck {
 
 	private void nextTurn() {
 		// Logique pour le prochain tour
+		boolean validatorIsGameOver = false;
 		do {
 			for (int i = 1; i < players.size(); i++) {
 				currentPlayer = players.get(i);
@@ -140,8 +138,14 @@ public class GameController implements Deck {
 				if (i == players.size() - 1) {
 					i = - 1;
 				}
+
+				if (currentPlayer.getHand().isEmpty()) {
+					// Si la main du joueur actuel est vide, le jeu est terminé
+					System.out.println("Le joueur " + currentPlayer.getName() + " a gagné !");
+					validatorIsGameOver = true;
+				}
 			}
-		} while (GameRules.isGameOver(players));
+		} while (! validatorIsGameOver);
 	}
 
 	private void applyActionEffect( Card actionCard ) {
@@ -168,32 +172,23 @@ public class GameController implements Deck {
 	}
 
 	private void applyReverseAction() {
-		System.out.println("REVERSE");
+		// Inverser le sens du jeu
+		Collections.reverse(players);
+
+		// Afficher le nouveau sens du jeu
+		System.out.println("Le sens du jeu a été inversé !");
 	}
 
 	private void applySkipAction() {
 		int currentPlayerIndex = players.indexOf(currentPlayer);
 
 		// Calculer l'index du prochain joueur après le saut de tour
-		int nextPlayerIndex = (currentPlayerIndex + 2) % players.size();
+		int nextPlayerIndex = (currentPlayerIndex + 1) % players.size();
 
 		// Mettre à jour le joueur actuel avec le joueur suivant
 		currentPlayer = players.get(nextPlayerIndex);
 
 		System.out.println("Le tour du prochain joueur (" + currentPlayer.getName() + ") est sauté !");
-	}
-
-	private void applyDrawTwoAction( Player player ) {
-		skipNextPlayerTurn();
-		for (int i = 0; i < 2; i++) {
-			Card card = drawCard();
-			if (card != null) {
-				player.getHand().add(card);
-			} else {
-				paquetCard.shuffle();
-				i--;
-			}
-		}
 	}
 
 	private void applyWildDrawFourAction() {
@@ -209,7 +204,7 @@ public class GameController implements Deck {
 		skipNextPlayerTurn();
 
 		// Faire piocher quatre cartes au joueur suivant
-		drawCardsFourForPlayer(currentPlayer);
+		drawCardsForPlayer(currentPlayer);
 	}
 
 	private void applyWildAction() {
@@ -255,8 +250,25 @@ public class GameController implements Deck {
 		currentPlayer = players.get(nextPlayerIndex);
 	}
 
-	private void drawCardsFourForPlayer( Player player ) {
-		for (int i = 0; i < 4; i++) {
+	private void applyDrawTwoAction( Player player ) {
+		for (int i = 0; i < 2; i++) {
+			Card drawnCard = drawCard();
+			if (drawnCard != null) {
+				player.getHand().add(drawnCard);
+			} else {
+				paquetCard.shuffle();
+				i--;
+			}
+		}
+
+		// Afficher les cartes piochées
+		System.out.println(player.getName() + " a pioché deux cartes.");
+		System.out.println("Cartes piochées : " + player.getHand().getLast().toString());
+	}
+
+	private void drawCardsForPlayer( Player player ) {
+		skipNextPlayerTurn();
+		for (int i = 0; i <= 4; i++) {
 			Card drawnCard = drawCard();
 			if (drawnCard != null) {
 				player.getHand().add(drawnCard);
