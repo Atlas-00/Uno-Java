@@ -251,7 +251,7 @@ public class GameController implements Deck {
 	}
 
 	private void applyDrawTwoAction( Player player ) {
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i <= 2; i++) {
 			Card drawnCard = drawCard();
 			if (drawnCard != null) {
 				player.getHand().add(drawnCard);

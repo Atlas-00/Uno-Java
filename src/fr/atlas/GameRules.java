@@ -4,8 +4,6 @@ import fr.atlas.Cards.ActionCard;
 import fr.atlas.Cards.Card;
 import fr.atlas.Cards.NumberCard;
 
-import java.util.List;
-
 public class GameRules {
 
 	public static boolean isPlayable( Card currentCardInPlay, Card drawnCard ) {
@@ -24,16 +22,5 @@ public class GameRules {
 
 	private static boolean isActionCardPlayable( ActionCard currentActionCard, ActionCard drawnActionCard ) {
 		return currentActionCard.getAction().equals(drawnActionCard.getAction());
-	}
-
-	public static boolean isGameOver( List<Player> players ) {
-		// Logique pour déterminer si le jeu est terminé (Si un joueur a vidé sa main)
-		for (Player player : players) {
-			if (player.getHand().isEmpty()) {
-				System.out.println("Le joueur ".concat(player.getName() + " à gagné !"));
-				return true;
-			}
-		}
-		return false;
 	}
 }
